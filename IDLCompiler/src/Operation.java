@@ -1,10 +1,10 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Operation {
     private String locality;
     private String type;
     private String name = "<undefined>";
-
     private List<Parameter> parameters = new ArrayList<Parameter>();
 
     public String getLocality() {

@@ -1,8 +1,8 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Interface {
     private String name = "<undefined>";
-
     private List<Operation> operations = new ArrayList<Operation>();
 
     public String getName() {

@@ -37,7 +37,6 @@ public class Program {
         exampleInterface.addOperation(operation);
 
 
-
         // ---- someRemoteOperation
         operation = new Operation();
         operation.setName("someRemoteOperation");
@@ -52,6 +51,6 @@ public class Program {
         System.out.println("--------------------------------");
 
         System.out.println("Java Interface");
-        new JavaInterfaceEmittter(System.out).emit(exampleInterface);
+        new JavaInterfaceEmitter(System.out).emit(exampleInterface);
     }
 }

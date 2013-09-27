@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.PrintStream;
 
 public class JavaInterfaceEmitter {
     private PrintStream output;
