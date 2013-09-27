@@ -1,9 +1,9 @@
 import java.io.*;
 
-public class JavaInterfaceEmittter {
+public class JavaInterfaceEmitter {
     private PrintStream output;
 
-    public JavaInterfaceEmittter(PrintStream output) {
+    public JavaInterfaceEmitter(PrintStream output) {
         this.output = output;
     }
 
