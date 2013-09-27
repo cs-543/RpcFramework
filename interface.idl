@@ -1,0 +1,3 @@
+interface RemoteObject {
+    local void someMethod();
+}
