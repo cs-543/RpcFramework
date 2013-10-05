@@ -1,3 +1,5 @@
+package Rpc.Compiler;
+
 public class Parameter {
     private boolean isRef;
     private boolean isIn;

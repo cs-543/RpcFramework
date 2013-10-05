@@ -1,3 +1,5 @@
+package Rpc.Compiler;
+
 import java.io.PrintStream;
 
 public class JavaSkeletonEmitter {
@@ -5,5 +7,9 @@ public class JavaSkeletonEmitter {
 
     public JavaSkeletonEmitter(PrintStream output) {
         this.output = output;
+    }
+
+    public void emit(Interface interface_) {
+        output.append("public ");
     }
 }

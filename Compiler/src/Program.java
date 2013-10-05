@@ -1,7 +1,9 @@
+import Rpc.Compiler.*;
+
 public class Program {
     public static void main(String[] args) throws Exception {
         /*
-        IDLCompiler compiler = new IDLCompiler(new FileInputStream("interface.idl"));
+        Rpc.Compiler.Rpc.Compiler compiler = new Rpc.Compiler.Rpc.Compiler(new FileInputStream("interface.idl"));
         */
 
         Interface exampleInterface;
@@ -48,9 +50,16 @@ public class Program {
         System.out.println("Parsed as:");
         new InterfaceEmitter(System.out).emit(exampleInterface);
 
-        System.out.println("--------------------------------");
+        System.out.print("\n--------------------------------\n");
 
         System.out.println("Java Interface");
         new JavaInterfaceEmitter(System.out).emit(exampleInterface);
+
+        System.out.print("\n--------------------------------\n");
+
+        System.out.println("Java Stub");
+        new JavaStubEmitter(System.out).emit(exampleInterface);
+
+
     }
 }

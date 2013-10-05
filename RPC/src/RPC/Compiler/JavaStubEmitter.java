@@ -1,29 +1,30 @@
+package Rpc.Compiler;
+
 import java.io.PrintStream;
 
-public class InterfaceEmitter {
+public class JavaStubEmitter {
     private PrintStream output;
 
-    public InterfaceEmitter(PrintStream output) {
+    public JavaStubEmitter(PrintStream output) {
         this.output = output;
     }
 
     public void emit(Interface interface_) {
-        output.append("interface ");
+        output.append("public class ");
         output.append(interface_.getName());
-        output.append(" {\n");
+        output.append("_Stub {\n");
 
-        for (Operation o : interface_.getOperations()) {
-            output.append("\t");
+        String delimiter = "";
+        for (Operation o: interface_.getOperations()) {
+            output.append(delimiter);
+
             emit(o);
-            output.append(";\n");
         }
 
         output.append("}");
     }
 
     private void emit(Operation operation) {
-        output.append(operation.getLocality());
-        output.append(" ");
         output.append(operation.getType());
         output.append(" ");
         output.append(operation.getName());
@@ -37,26 +38,12 @@ public class InterfaceEmitter {
             emit(p);
         }
 
-        output.append(")");
+        output.append(") {\n");
+
+        output.append("}");
     }
 
     private void emit(Parameter parameter) {
-        if (parameter.isRef()) {
-            output.append("ref ");
-        }
-
-        if (parameter.isIn() && parameter.isOut()) {
-            output.append("inout ");
-        } else {
-            if (parameter.isIn()) {
-                output.append("in ");
-            }
-
-            if (parameter.isOut()) {
-                output.append("out ");
-            }
-        }
-
         output.append(parameter.getType());
         output.append(" ");
         output.append(parameter.getName());

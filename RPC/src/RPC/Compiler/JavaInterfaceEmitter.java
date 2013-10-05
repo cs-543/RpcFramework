@@ -1,3 +1,5 @@
+package Rpc.Compiler;
+
 import java.io.PrintStream;
 
 public class JavaInterfaceEmitter {

@@ -1,13 +1,15 @@
+package Rpc.Compiler;
+
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class IDLCompiler {
+public class IdlCompiler {
     private static final String INTERFACE_TOKEN = "interface";
     private static final String IDENTIFIER_PATTERN = "[a-zA-Z_][0-9a-zA-Z_]*";
     private Scanner scanner;
     private Interface anInterface;
 
-    public IDLCompiler(InputStream stream) throws Exception {
+    public IdlCompiler(InputStream stream) throws Exception {
         this.scanner = new Scanner(stream);
 
 
