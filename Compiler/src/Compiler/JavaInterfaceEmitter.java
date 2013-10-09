@@ -1,24 +1,23 @@
-package Rpc.Compiler;
+package Compiler;
 
 import java.io.PrintStream;
 
-public class JavaStubEmitter {
+public class JavaInterfaceEmitter {
     private PrintStream output;
 
-    public JavaStubEmitter(PrintStream output) {
+    public JavaInterfaceEmitter(PrintStream output) {
         this.output = output;
     }
 
     public void emit(Interface interface_) {
-        output.append("public class ");
+        output.append("public interface ");
         output.append(interface_.getName());
-        output.append("_Stub {\n");
+        output.append(" {\n");
 
-        String delimiter = "";
-        for (Operation o: interface_.getOperations()) {
-            output.append(delimiter);
-
-            emit(o);
+        for (Operation operation : interface_.getOperations()) {
+            output.append("\t");
+            emit(operation);
+            output.append(";\n");
         }
 
         output.append("}");
@@ -38,9 +37,7 @@ public class JavaStubEmitter {
             emit(p);
         }
 
-        output.append(") {\n");
-
-        output.append("}");
+        output.append(")");
     }
 
     private void emit(Parameter parameter) {

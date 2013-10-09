@@ -1,20 +1,38 @@
-package Rpc.Compiler;
+package Compiler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Operation {
-    private String locality;
-    private String type;
+    private boolean isAsync;
+    private boolean isLocal;
+    private ExecutionPolicy policy;
+    private String type = "<undefined>";
     private String name = "<undefined>";
     private List<Parameter> parameters = new ArrayList<Parameter>();
 
-    public String getLocality() {
-        return locality;
+    public boolean isAsync() {
+        return isAsync;
     }
 
-    public void setLocality(String locality) {
-        this.locality = locality;
+    public void setAsync(boolean async) {
+        isAsync = async;
+    }
+
+    public boolean isLocal() {
+        return isLocal;
+    }
+
+    public void setLocal(boolean local) {
+        isLocal = local;
+    }
+
+    public ExecutionPolicy getPolicy() {
+        return policy;
+    }
+
+    public void setPolicy(ExecutionPolicy policy) {
+        this.policy = policy;
     }
 
     public String getType() {

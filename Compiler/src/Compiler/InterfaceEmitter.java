@@ -1,4 +1,4 @@
-package Rpc.Compiler;
+package Compiler;
 
 import java.io.PrintStream;
 
@@ -24,7 +24,7 @@ public class InterfaceEmitter {
     }
 
     private void emit(Operation operation) {
-        output.append(operation.getLocality());
+        output.append(operation.isLocal() ? "local" : "remote");
         output.append(" ");
         output.append(operation.getType());
         output.append(" ");

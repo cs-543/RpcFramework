@@ -1,4 +1,4 @@
-package Rpc.Compiler;
+package Compiler;
 
 import java.io.PrintStream;
 

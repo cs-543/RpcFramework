@@ -1,4 +1,4 @@
-package Rpc.Compiler;
+package Compiler;
 
 public class Parameter {
     private boolean isRef;
@@ -11,8 +11,8 @@ public class Parameter {
         return isRef;
     }
 
-    public void setRef(boolean reference) {
-        this.isRef = reference;
+    public void setRef(boolean ref) {
+        isRef = ref;
     }
 
     public boolean isIn() {
@@ -20,7 +20,7 @@ public class Parameter {
     }
 
     public void setIn(boolean in) {
-        this.isIn = in;
+        isIn = in;
     }
 
     public boolean isOut() {
@@ -28,7 +28,15 @@ public class Parameter {
     }
 
     public void setOut(boolean out) {
-        this.isOut = out;
+        isOut = out;
+    }
+
+    public boolean isInOut() {
+        return isIn && isOut;
+    }
+
+    public void setInOut(boolean inOut) {
+        isIn = isOut = inOut;
     }
 
     public String getType() {
