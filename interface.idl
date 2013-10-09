@@ -1,3 +1,6 @@
 interface RemoteObject {
-    local void someMethod();
+    [AtLeastOnce]
+    async void operation1();
+
+    int operation2();
 }
