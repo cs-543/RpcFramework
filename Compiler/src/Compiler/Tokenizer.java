@@ -105,7 +105,7 @@ public class Tokenizer {
             return parseWord(c);
         }
 
-        throw new Error("Parse error line " + line + ", unexpected `" + c + "`");
+        throw new Error(String.format("Parse error line %d, column %d: unexpected `%c`", line, column, c));
     }
 
     /**
