@@ -1,6 +1,6 @@
 interface RemoteObject {
     [AtLeastOnce]
-    async void operation1();
+    async void operation1(in int arg0, in out char arg1);
 
     int operation2();
 }
