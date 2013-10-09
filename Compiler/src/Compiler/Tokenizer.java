@@ -119,15 +119,16 @@ public class Tokenizer {
 
     /**
      * Parses a word (keyword or identifier)
-     * @param initial First character of the word.
+     * @param firstChar First character of the word.
      * @return The parsed word.
      * @throws Exception
      */
-    private Token parseWord(char initial) throws Exception {
+    private Token parseWord(char firstChar) throws Exception {
         StringBuilder wordBuilder = new StringBuilder();
+        int firstCharColumn = column;
 
         // Read all alphanumeric characters into the word builder.
-        char c = initial;
+        char c = firstChar;
         do {
             wordBuilder.append(c);
             c = nextChar();
@@ -145,7 +146,7 @@ public class Tokenizer {
         }
 
         // Identifier.
-        return new Token(line, column, TT_IDENTIFIER, word);
+        return new Token(line, firstCharColumn, TT_IDENTIFIER, word);
     }
 
     /**
