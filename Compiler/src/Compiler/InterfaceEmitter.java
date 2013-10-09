@@ -14,18 +14,23 @@ public class InterfaceEmitter {
         output.append(interface_.getName());
         output.append(" {\n");
 
+        String delimiter = "";
         for (Operation o : interface_.getOperations()) {
-            output.append("\t");
+            output.append(delimiter);
+            delimiter = "\n";
             emit(o);
-            output.append(";\n");
         }
 
         output.append("}");
     }
 
     private void emit(Operation operation) {
-        output.append(operation.isLocal() ? "local" : "remote");
-        output.append(" ");
+        output.append("\t[");
+        output.append(operation.getPolicy().toString());
+        output.append("]\n\t");
+
+        output.append(operation.isAsync() ? "async " : "");
+        output.append(operation.isLocal() ? "local " : "remote ");
         output.append(operation.getType());
         output.append(" ");
         output.append(operation.getName());
@@ -39,7 +44,7 @@ public class InterfaceEmitter {
             emit(p);
         }
 
-        output.append(")");
+        output.append(");\n");
     }
 
     private void emit(Parameter parameter) {
@@ -47,16 +52,12 @@ public class InterfaceEmitter {
             output.append("ref ");
         }
 
-        if (parameter.isIn() && parameter.isOut()) {
-            output.append("inout ");
-        } else {
-            if (parameter.isIn()) {
-                output.append("in ");
-            }
+        if (parameter.isIn()) {
+            output.append("in ");
+        }
 
-            if (parameter.isOut()) {
-                output.append("out ");
-            }
+        if (parameter.isOut()) {
+            output.append("out ");
         }
 
         output.append(parameter.getType());
