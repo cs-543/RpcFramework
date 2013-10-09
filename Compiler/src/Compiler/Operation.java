@@ -6,7 +6,7 @@ import java.util.List;
 public class Operation {
     private boolean isAsync;
     private boolean isLocal;
-    private ExecutionPolicy policy;
+    private ExecutionPolicy policy = ExecutionPolicy.AtMostOnce;
     private String type = "<undefined>";
     private String name = "<undefined>";
     private List<Parameter> parameters = new ArrayList<Parameter>();
