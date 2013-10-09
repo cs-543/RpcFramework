@@ -3,7 +3,7 @@ package Compiler;
 import java.io.PrintStream;
 
 public class JavaStubEmitter {
-    private PrintStream output;
+    private final PrintStream output;
 
     public JavaStubEmitter(PrintStream output) {
         this.output = output;
@@ -15,7 +15,7 @@ public class JavaStubEmitter {
         output.append("_Stub {\n");
 
         String delimiter = "";
-        for (Operation o: interface_.getOperations()) {
+        for (Operation o : interface_.getOperations()) {
             output.append(delimiter);
 
             emit(o);

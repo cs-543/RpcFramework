@@ -31,28 +31,29 @@ public class Token {
     /**
      * Line where this token was parsed.
      */
-    private int line;
+    private final int line;
 
     /**
      * Column where this token was parsed.
      */
-    private int column;
+    private final int column;
 
     /**
      * Type of token.
      */
-    private TokenType type;
+    private final TokenType type;
 
     /**
      * Value of token. Meaningful only for identifiers.
      */
-    private String value;
+    private final String value;
 
     /**
      * Initializes a new instance of the Token class.
-     * @param line The line where this Token was parsed.
+     *
+     * @param line   The line where this Token was parsed.
      * @param column The column where this Token was parsed.
-     * @param type The type of this Token.
+     * @param type   The type of this Token.
      */
     public Token(int line, int column, TokenType type) {
         this(line, column, type, null);
@@ -60,10 +61,11 @@ public class Token {
 
     /**
      * Initializes a new instance of the Token class.
-     * @param line The line where this Token was parsed.
+     *
+     * @param line   The line where this Token was parsed.
      * @param column The column where this Token was parsed.
-     * @param type The type of this Token.
-     * @param value The value of this Token.
+     * @param type   The type of this Token.
+     * @param value  The value of this Token.
      */
     public Token(int line, int column, TokenType type, String value) {
         this.line = line;

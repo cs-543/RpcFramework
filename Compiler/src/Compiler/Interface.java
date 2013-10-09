@@ -12,7 +12,7 @@ public class Interface {
     /**
      * List of Operations this Compiler.Interface supports.
      */
-    private List<Operation> operations = new ArrayList<Operation>();
+    private final List<Operation> operations = new ArrayList<Operation>();
 
     /**
      * @return The name identifying this Compiler.Interface.
@@ -37,6 +37,7 @@ public class Interface {
 
     /**
      * Adds a new operation to be supported by this Compiler.Interface.
+     *
      * @param declaration The new operation to be supported.
      * @throws Exception
      */

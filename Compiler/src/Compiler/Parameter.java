@@ -1,6 +1,6 @@
 package Compiler;
 
-public class Parameter {
+class Parameter {
     private boolean isRef;
     private boolean isIn;
     private boolean isOut;
@@ -29,14 +29,6 @@ public class Parameter {
 
     public void setOut(boolean out) {
         isOut = out;
-    }
-
-    public boolean isInOut() {
-        return isIn && isOut;
-    }
-
-    public void setInOut(boolean inOut) {
-        isIn = isOut = inOut;
     }
 
     public String getType() {

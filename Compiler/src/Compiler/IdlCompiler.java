@@ -1,6 +1,6 @@
 package Compiler;
 
-import java.io.*;
+import java.io.InputStream;
 
 import static Compiler.Token.TokenType.*;
 
@@ -11,7 +11,7 @@ public class IdlCompiler {
     /**
      * Tokenizer providing tokens from the input stream.
      */
-    private Tokenizer tokenizer;
+    private final Tokenizer tokenizer;
 
     /**
      * Token being currently analyzed.
@@ -30,6 +30,7 @@ public class IdlCompiler {
 
     /**
      * Initializes a new instance of the IdlCompiler class.
+     *
      * @param stream The input stream to compile from.
      * @throws Exception
      */
@@ -50,6 +51,7 @@ public class IdlCompiler {
 
     /**
      * Parses an interface.
+     *
      * @throws Exception
      */
     private Interface nextInterface() throws Exception {
@@ -76,6 +78,7 @@ public class IdlCompiler {
 
     /**
      * Parses an operation.
+     *
      * @return The parsed operation or null if no more operation is available.
      * @throws Exception
      */
@@ -130,6 +133,7 @@ public class IdlCompiler {
 
     /**
      * Parses a parameter.
+     *
      * @param eatComma Whether a leading comma (from a previous parameter) should be parsed.
      * @return The parsed parameter.
      * @throws Exception
@@ -163,6 +167,7 @@ public class IdlCompiler {
 
     /**
      * Advances to the next token if the current token is of a given type.
+     *
      * @param type The desired type of the current token.
      * @return True if the current token is of type type, false if not.
      * @throws Exception
@@ -183,6 +188,7 @@ public class IdlCompiler {
 
     /**
      * Advances to the next token if the current token is of a given type, raises an exception if not.
+     *
      * @param type The expected type of the current token.
      * @throws Exception
      */

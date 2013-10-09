@@ -3,13 +3,13 @@ package Compiler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Operation {
+class Operation {
     private boolean isAsync;
     private boolean isLocal;
     private ExecutionPolicy policy = ExecutionPolicy.AtMostOnce;
     private String type = "<undefined>";
     private String name = "<undefined>";
-    private List<Parameter> parameters = new ArrayList<Parameter>();
+    private final List<Parameter> parameters = new ArrayList<Parameter>();
 
     public boolean isAsync() {
         return isAsync;

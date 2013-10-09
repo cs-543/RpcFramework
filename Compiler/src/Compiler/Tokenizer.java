@@ -1,17 +1,16 @@
 package Compiler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import static Compiler.Token.TokenType.*;
 
 /**
  * Creates Tokens from a stream of characters.
  */
-public class Tokenizer {
+class Tokenizer {
     /**
      * Map of single letter tokens and their corresponding TokenType.
      */
@@ -25,8 +24,7 @@ public class Tokenizer {
     /**
      * Populate both maps.
      */
-    static
-    {
+    static {
         simpleTokens.put('{', TT_OPENBRACE);
         simpleTokens.put('}', TT_CLOSEBRACE);
         simpleTokens.put('[', TT_OPENBRACKET);
@@ -36,24 +34,24 @@ public class Tokenizer {
         simpleTokens.put(',', TT_COMMA);
         simpleTokens.put(';', TT_SEMICOLON);
 
-        keywords.put("interface",   TT_INTERFACE);
-        keywords.put("AtMostOnce" , TT_ATMOSTONCE);
+        keywords.put("interface", TT_INTERFACE);
+        keywords.put("AtMostOnce", TT_ATMOSTONCE);
         keywords.put("AtLeastOnce", TT_ATLEASTONCE);
-        keywords.put("async",       TT_ASYNC);
-        keywords.put("local",       TT_LOCAL);
-        keywords.put("in",          TT_IN);
-        keywords.put("out",         TT_OUT);
+        keywords.put("async", TT_ASYNC);
+        keywords.put("local", TT_LOCAL);
+        keywords.put("in", TT_IN);
+        keywords.put("out", TT_OUT);
     }
 
     /**
      * Input stream reader from which this Tokenizer reads.
      */
-    private InputStreamReader reader;
+    private final InputStreamReader reader;
 
     /**
      * Character buffer, for performance.
      */
-    private char[] buffer = new char[4096];
+    private final char[] buffer = new char[4096];
 
     /**
      * Current position in buffer.
@@ -77,6 +75,7 @@ public class Tokenizer {
 
     /**
      * Initializes a new instance of the Tokenizer class.
+     *
      * @param stream The stream to tokenize.
      */
     public Tokenizer(InputStream stream) {
@@ -110,6 +109,7 @@ public class Tokenizer {
 
     /**
      * Builds a Token of a given type.
+     *
      * @param type The type of the Token to create.
      * @return The newly created Token.
      */
@@ -119,6 +119,7 @@ public class Tokenizer {
 
     /**
      * Parses a word (keyword or identifier)
+     *
      * @param firstChar First character of the word.
      * @return The parsed word.
      * @throws Exception

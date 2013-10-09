@@ -3,7 +3,7 @@ package Compiler;
 import java.io.PrintStream;
 
 public class JavaInterfaceEmitter {
-    private PrintStream output;
+    private final PrintStream output;
 
     public JavaInterfaceEmitter(PrintStream output) {
         this.output = output;
