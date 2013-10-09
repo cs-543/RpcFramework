@@ -3,7 +3,7 @@ package Compiler;
 /**
  * Represents a token.
  */
-public class Token {
+class Token {
     public enum TokenType {
         // Simple tokens.
         TT_OPENBRACE,

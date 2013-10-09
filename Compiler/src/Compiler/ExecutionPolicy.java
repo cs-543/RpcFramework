@@ -3,7 +3,7 @@ package Compiler;
 /**
  * Different execution policies for remote procedures.
  */
-public enum ExecutionPolicy {
+enum ExecutionPolicy {
     /**
      * A call to the procedure may execute zero or once.
      */
