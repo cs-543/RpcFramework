@@ -3,10 +3,10 @@ package Compiler;
 import java.io.PrintStream;
 
 class JavaSkeletonEmitter {
-    private final PrintStream output;
+    private final IndentedPrintStream output;
 
     public JavaSkeletonEmitter(PrintStream output) {
-        this.output = output;
+        this.output =  new IndentedPrintStream(output);
     }
 
     public void emit(Interface interface_) {

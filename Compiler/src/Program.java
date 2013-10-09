@@ -1,6 +1,6 @@
-import java.io.FileInputStream;
-
 import Compiler.*;
+
+import java.io.FileInputStream;
 
 public class Program {
     public static void main(String[] args) throws Exception {

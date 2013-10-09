@@ -3,24 +3,27 @@ package Compiler;
 import java.io.PrintStream;
 
 public class JavaStubEmitter {
-    private final PrintStream output;
+    private final IndentedPrintStream output;
 
     public JavaStubEmitter(PrintStream output) {
-        this.output = output;
+        this.output = new IndentedPrintStream(output);
     }
 
     public void emit(Interface interface_) {
         output.append("public class ");
         output.append(interface_.getName());
         output.append("_Stub {\n");
+        output.indent();
 
         String delimiter = "";
         for (Operation o : interface_.getOperations()) {
             output.append(delimiter);
+            delimiter = "\n";
 
             emit(o);
         }
 
+        output.unindent();
         output.append("}");
     }
 
@@ -39,8 +42,12 @@ public class JavaStubEmitter {
         }
 
         output.append(") {\n");
+        output.indent();
 
-        output.append("}");
+        output.append("// body\n");
+
+        output.unindent();
+        output.append("}\n");
     }
 
     private void emit(Parameter parameter) {
