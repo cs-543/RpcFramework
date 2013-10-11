@@ -2,7 +2,7 @@ package Compiler;
 
 import java.io.PrintStream;
 
-public class IndentedPrintStream {
+class IndentedPrintStream {
     private final PrintStream output;
     private int indentLevel;
     private boolean shouldIndent;

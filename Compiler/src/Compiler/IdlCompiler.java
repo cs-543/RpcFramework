@@ -97,7 +97,7 @@ public class IdlCompiler {
             } else if (accept(TT_ATLEASTONCE)) {
                 operation.setPolicy(ExecutionPolicy.AtLeastOnce);
             } else {
-                throw new Error("Expected policy");
+                throw new Error(String.format("Syntax error line %d, column %d: expected execution policy", currentToken.getLine(), currentToken.getColumn()));
             }
 
             expect(TT_CLOSEBRACKET);
