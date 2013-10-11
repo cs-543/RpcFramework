@@ -10,7 +10,7 @@ enum ExecutionPolicy {
     AtMostOnce,
 
     /**
-     * A call to the remote procedure may execute once or more.
+     * A call to the procedure may execute once or more.
      */
     AtLeastOnce
 }

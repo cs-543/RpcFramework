@@ -13,6 +13,7 @@ public class InterfaceEmitter {
 
     /**
      * Initializes a new instance of the InterfaceEmitter class.
+     *
      * @param output The output stream.
      */
     public InterfaceEmitter(PrintStream output) {
@@ -21,6 +22,7 @@ public class InterfaceEmitter {
 
     /**
      * Emits an interface into the output stream.
+     *
      * @param interface_ The interface to emit.
      */
     public void emit(Interface interface_) {
@@ -43,6 +45,7 @@ public class InterfaceEmitter {
 
     /**
      * Emits an operation into the output stream.
+     *
      * @param operation The operation to emit.
      */
     private void emit(Operation operation) {
@@ -77,6 +80,7 @@ public class InterfaceEmitter {
 
     /**
      * Emits a parameter into the output stream.
+     *
      * @param parameter The parameter to emit.
      */
     private void emit(Parameter parameter) {

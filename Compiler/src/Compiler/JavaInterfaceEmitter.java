@@ -32,6 +32,7 @@ public class JavaInterfaceEmitter {
 
     /**
      * Initializes a new instance of the JavaInterfaceEmitter class.
+     *
      * @param output The output stream.
      */
     public JavaInterfaceEmitter(PrintStream output) {
@@ -40,6 +41,7 @@ public class JavaInterfaceEmitter {
 
     /**
      * Emits an interface into the output stream.
+     *
      * @param interface_ The interface to emit.
      */
     public void emit(Interface interface_) {

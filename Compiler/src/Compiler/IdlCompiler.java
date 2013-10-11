@@ -52,6 +52,7 @@ public class IdlCompiler {
     /**
      * Parses an interface.
      *
+     * @return The parsed interface.
      * @throws Exception
      */
     private Interface nextInterface() throws Exception {

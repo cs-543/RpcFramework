@@ -41,17 +41,17 @@ public class Interface {
     /**
      * Adds a new operation to be supported by this Interface.
      *
-     * @param declaration The new operation to be supported.
+     * @param operation The new operation to be supported.
      * @throws Exception
      */
-    public void addOperation(Operation declaration) throws Exception {
+    public void addOperation(Operation operation) throws Exception {
         // Throw on duplicate operation name.
         for (Operation o : operations) {
-            if (o.getName().equals(declaration.getName())) {
-                throw new Exception("Duplicate operation " + declaration.getName());
+            if (o.getName().equals(operation.getName())) {
+                throw new Exception("Duplicate operation " + operation.getName());
             }
         }
 
-        operations.add(declaration);
+        operations.add(operation);
     }
 }

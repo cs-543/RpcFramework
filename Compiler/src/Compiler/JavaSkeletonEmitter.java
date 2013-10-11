@@ -6,7 +6,7 @@ class JavaSkeletonEmitter {
     private final IndentedPrintStream output;
 
     public JavaSkeletonEmitter(PrintStream output) {
-        this.output =  new IndentedPrintStream(output);
+        this.output = new IndentedPrintStream(output);
     }
 
     public void emit(Interface interface_) {
