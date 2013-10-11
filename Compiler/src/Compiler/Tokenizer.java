@@ -100,7 +100,7 @@ class Tokenizer {
         }
 
         // Keyword or identifier start.
-        if (Character.isAlphabetic(c)) {
+        if (Character.isJavaIdentifierStart(c)) {
             return parseWord(c);
         }
 
@@ -133,7 +133,7 @@ class Tokenizer {
         do {
             wordBuilder.append(c);
             c = nextChar();
-        } while (Character.isAlphabetic(c) || Character.isDigit(c));
+        } while (Character.isJavaIdentifierPart(c));
 
         // Put the last read character back because we read one too much.
         bufferPosition--;
