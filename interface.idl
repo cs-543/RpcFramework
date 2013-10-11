@@ -1,6 +1,18 @@
-interface RemoteObject {
-    [AtLeastOnce]
-    async void operation1(in int arg0, in out char arg1);
+interface TestInterface {
+    void __test_voidCall();
 
-    int operation2();
+    void __test_inArg(in int arg);
+
+    void __test_outArg(out int arg);
+
+    void __test_inOutArg(in out int arg);
+
+    void __test_allPrimitiveArgs(byte b, char c, short s, int i, long l, float f, double d, String str);
+
+    int __test_forwardArg(int arg);
+
+    async int __test_forwardArgAsync(int arg);
+
+    [AtLeastOnce]
+    void __test_policy_atLeastOnce();
 }
