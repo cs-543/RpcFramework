@@ -3,11 +3,8 @@ package Rpc;
 public class InOut<T> {
     private T value;
 
-    public InOut() {
-    }
-
     public InOut(T value) {
-        this.value = value;
+        setValue(value);
     }
 
     public T getValue() {
@@ -15,6 +12,10 @@ public class InOut<T> {
     }
 
     public void setValue(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("value may not be null");
+        }
+
         this.value = value;
     }
 }

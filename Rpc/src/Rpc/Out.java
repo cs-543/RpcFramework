@@ -6,10 +6,6 @@ public class Out<T> {
     public Out() {
     }
 
-    public Out(T value) {
-        this.value = value;
-    }
-
     public T getValue() {
         return value;
     }
