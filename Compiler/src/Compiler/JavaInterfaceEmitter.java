@@ -1,30 +1,11 @@
 package Compiler;
 
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class capable of printing an interface in Java.
  */
 public class JavaInterfaceEmitter {
-    /**
-     * Maps primitive types to their wrapping type.
-     */
-    private static final Map<String, String> wrappers = new HashMap<String, String>();
-
-    static {
-        wrappers.put("boolean", "Boolean");
-        wrappers.put("byte", "Byte");
-        wrappers.put("char", "Character");
-        wrappers.put("double", "Double");
-        wrappers.put("float", "Float");
-        wrappers.put("int", "Integer");
-        wrappers.put("long", "Long");
-        wrappers.put("short", "Short");
-        wrappers.put("void", "Void");
-    }
-
     /**
      * Output stream.
      */
@@ -50,8 +31,13 @@ public class JavaInterfaceEmitter {
         output.append(" {\n");
         output.indent();
 
+        String delimiter = "";
         for (Operation operation : interface_.getOperations()) {
+            output.append(delimiter);
+            delimiter  = "\n";
+
             emit(operation);
+            output.append(";\n");
         }
 
         output.unindent();
@@ -61,9 +47,28 @@ public class JavaInterfaceEmitter {
     private void emit(Operation operation) {
         if (operation.isAsync()) {
             emitAsyncOperation(operation);
-            return;
+        } else {
+            emitSyncOperation(operation);
+        }
+    }
+
+    private void emit(Parameter parameter) {
+        if (parameter.isOut() && parameter.isIn()) {
+            // InOut parameter.
+            output.append(TypeBuilder.genericInOutType(parameter.getType()));
+        } else if (parameter.isOut()) {
+            // Out parameter.
+            output.append(TypeBuilder.genericOutType(parameter.getType()));
+        } else {
+            // In parameter.
+            output.append(parameter.getType());
         }
 
+        output.append(" ");
+        output.append(parameter.getName());
+    }
+
+    private void emitSyncOperation(Operation operation) {
         output.append(operation.getType());
         output.append(" ");
         output.append(operation.getName());
@@ -77,25 +82,13 @@ public class JavaInterfaceEmitter {
             emit(p);
         }
 
-        output.append(");\n");
-    }
-
-    private void emit(Parameter parameter) {
-        if (parameter.isOut()) {
-            emitOutParameter(parameter);
-            return;
-        }
-
-        output.append(parameter.getType());
-        output.append(" ");
-        output.append(parameter.getName());
+        output.append(")");
     }
 
     private void emitAsyncOperation(Operation operation) {
         // async operations return void.
         output.append("void ");
         output.append(operation.getName());
-
         output.append("(");
 
         for (Parameter p : operation.getParameters()) {
@@ -104,26 +97,7 @@ public class JavaInterfaceEmitter {
         }
 
         // Append callback parameter.
-        output.append("Callback<");
-        output.append(makeWrapper(operation.getType()));
-        output.append("> callback);\n");
-    }
-
-    private void emitOutParameter(Parameter parameter) {
-        // Emit in modifier, if any.
-        output.append(parameter.isIn() ? "In" : "");
-
-        output.append("Out<");
-        output.append(makeWrapper(parameter.getType()));
-        output.append("> ");
-        output.append(parameter.getName());
-    }
-
-    private String makeWrapper(String type) {
-        if (wrappers.containsKey(type)) {
-            return wrappers.get(type);
-        }
-
-        return type;
+        output.append(TypeBuilder.genericCallbackType(operation.getType()));
+        output.append(" callback)");
     }
 }
