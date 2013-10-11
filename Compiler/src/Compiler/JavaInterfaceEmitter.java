@@ -4,7 +4,13 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class capable of printing an interface in Java.
+ */
 public class JavaInterfaceEmitter {
+    /**
+     * Maps primitive types to their wrapping type.
+     */
     private static final Map<String, String> wrappers = new HashMap<String, String>();
 
     static {
@@ -19,12 +25,23 @@ public class JavaInterfaceEmitter {
         wrappers.put("void", "Void");
     }
 
+    /**
+     * Output stream.
+     */
     private final IndentedPrintStream output;
 
+    /**
+     * Initializes a new instance of the JavaInterfaceEmitter class.
+     * @param output The output stream.
+     */
     public JavaInterfaceEmitter(PrintStream output) {
         this.output = new IndentedPrintStream(output);
     }
 
+    /**
+     * Emits an interface into the output stream.
+     * @param interface_ The interface to emit.
+     */
     public void emit(Interface interface_) {
         output.append("public interface ");
         output.append(interface_.getName());
@@ -91,14 +108,10 @@ public class JavaInterfaceEmitter {
     }
 
     private void emitOutParameter(Parameter parameter) {
-        if (parameter.isIn()) {
-            // in out modifier.
-            output.append("InOut<");
-        } else {
-            // out modifier only.
-            output.append("Out<");
-        }
+        // Emit in modifier, if any.
+        output.append(parameter.isIn() ? "In" : "");
 
+        output.append("Out<");
         output.append(makeWrapper(parameter.getType()));
         output.append("> ");
         output.append(parameter.getName());
