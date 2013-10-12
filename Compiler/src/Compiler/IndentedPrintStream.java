@@ -12,6 +12,10 @@ class IndentedPrintStream {
         this.output = new PrintStream(output);
     }
 
+    public void close() {
+        output.close();
+    }
+
     public void append(String str) {
         if (shouldIndent) {
             for (int i = 0; i < indentLevel; ++i) {

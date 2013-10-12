@@ -2,11 +2,9 @@ package Compiler;
 
 import java.io.PrintStream;
 
-class JavaSkeletonEmitter {
-    private final IndentedPrintStream output;
-
+class JavaSkeletonEmitter extends Emitter {
     public JavaSkeletonEmitter(PrintStream output) {
-        this.output = new IndentedPrintStream(output);
+        super(output);
     }
 
     public void emit(Interface interface_) {

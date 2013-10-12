@@ -17,8 +17,8 @@ public class Program {
 
         File interfaceFile = new File(idlFile.getParentFile(), interface_.getName() + ".java");
         File stubFile = new File(idlFile.getParentFile(), interface_.getName() + "_Stub.java");
-        
-        new JavaInterfaceEmitter(new FileOutputStream(interfaceFile)).emit(interface_);
-        new JavaStubEmitter(new FileOutputStream(stubFile)).emit(interface_);
+
+        new JavaInterfaceEmitter(new FileOutputStream(interfaceFile)).emit(interface_).close();
+        new JavaStubEmitter(new FileOutputStream(stubFile)).emit(interface_).close();
     }
 }

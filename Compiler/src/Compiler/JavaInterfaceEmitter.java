@@ -5,27 +5,23 @@ import java.io.OutputStream;
 /**
  * Class capable of printing an interface in Java.
  */
-public class JavaInterfaceEmitter {
-    /**
-     * Output stream.
-     */
-    private final IndentedPrintStream output;
-
+public class JavaInterfaceEmitter extends Emitter {
     /**
      * Initializes a new instance of the JavaInterfaceEmitter class.
      *
      * @param output The output stream.
      */
     public JavaInterfaceEmitter(OutputStream output) {
-        this.output = new IndentedPrintStream(output);
+        super(output);
     }
 
     /**
      * Emits an interface into the output stream.
      *
      * @param interface_ The interface to emit.
+     * @return Returns itself for method chaining.
      */
-    public void emit(Interface interface_) {
+    public JavaInterfaceEmitter emit(Interface interface_) {
         output.append("public interface ");
         output.append(interface_.getName());
         output.append(" {\n");
@@ -42,6 +38,8 @@ public class JavaInterfaceEmitter {
 
         output.unindent();
         output.append("}");
+
+        return this;
     }
 
     private void emit(Operation operation) {

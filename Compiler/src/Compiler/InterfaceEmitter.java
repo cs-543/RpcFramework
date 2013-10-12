@@ -5,27 +5,23 @@ import java.io.PrintStream;
 /**
  * Class capable of printing an interface in IDL.
  */
-public class InterfaceEmitter {
-    /**
-     * Output stream.
-     */
-    private final PrintStream output;
-
+public class InterfaceEmitter extends Emitter {
     /**
      * Initializes a new instance of the InterfaceEmitter class.
      *
      * @param output The output stream.
      */
     public InterfaceEmitter(PrintStream output) {
-        this.output = output;
+        super(output);
     }
 
     /**
      * Emits an interface into the output stream.
      *
      * @param interface_ The interface to emit.
+     * @return Returns itself for method chaining.
      */
-    public void emit(Interface interface_) {
+    public InterfaceEmitter emit(Interface interface_) {
         // Begin of interface.
         output.append("interface ");
         output.append(interface_.getName());
@@ -41,6 +37,8 @@ public class InterfaceEmitter {
 
         // End of interface.
         output.append("}");
+
+        return this;
     }
 
     /**

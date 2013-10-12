@@ -2,14 +2,12 @@ package Compiler;
 
 import java.io.OutputStream;
 
-public class JavaStubEmitter {
-    private final IndentedPrintStream output;
-
+public class JavaStubEmitter extends Emitter {
     public JavaStubEmitter(OutputStream output) {
-        this.output = new IndentedPrintStream(output);
+        super(output);
     }
 
-    public void emit(Interface interface_) {
+    public JavaStubEmitter emit(Interface interface_) {
         output.append("public class ");
         output.append(interface_.getName());
         output.append("_Stub {\n");
@@ -26,6 +24,8 @@ public class JavaStubEmitter {
 
         output.unindent();
         output.append("}");
+
+        return this;
     }
 
     private void emit(Operation operation) {
