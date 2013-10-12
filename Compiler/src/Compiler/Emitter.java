@@ -12,4 +12,6 @@ public abstract class Emitter {
     public void close() {
         output.close();
     }
+
+    public abstract Emitter emit(Interface input);
 }
