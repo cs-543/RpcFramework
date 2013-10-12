@@ -1,6 +1,6 @@
 package Compiler;
 
-import java.io.PrintStream;
+import java.io.OutputStream;
 
 /**
  * Class capable of printing an interface in Java.
@@ -16,7 +16,7 @@ public class JavaInterfaceEmitter {
      *
      * @param output The output stream.
      */
-    public JavaInterfaceEmitter(PrintStream output) {
+    public JavaInterfaceEmitter(OutputStream output) {
         this.output = new IndentedPrintStream(output);
     }
 
@@ -34,7 +34,7 @@ public class JavaInterfaceEmitter {
         String delimiter = "";
         for (Operation operation : interface_.getOperations()) {
             output.append(delimiter);
-            delimiter  = "\n";
+            delimiter = "\n";
 
             emit(operation);
             output.append(";\n");

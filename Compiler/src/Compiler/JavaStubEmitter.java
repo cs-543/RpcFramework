@@ -1,11 +1,11 @@
 package Compiler;
 
-import java.io.PrintStream;
+import java.io.OutputStream;
 
 public class JavaStubEmitter {
     private final IndentedPrintStream output;
 
-    public JavaStubEmitter(PrintStream output) {
+    public JavaStubEmitter(OutputStream output) {
         this.output = new IndentedPrintStream(output);
     }
 

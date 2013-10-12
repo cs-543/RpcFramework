@@ -1,5 +1,6 @@
 package Compiler;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 class IndentedPrintStream {
@@ -7,8 +8,8 @@ class IndentedPrintStream {
     private int indentLevel;
     private boolean shouldIndent;
 
-    public IndentedPrintStream(PrintStream output) {
-        this.output = output;
+    public IndentedPrintStream(OutputStream output) {
+        this.output = new PrintStream(output);
     }
 
     public void append(String str) {
