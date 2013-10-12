@@ -1,6 +1,6 @@
 package Rpc;
 
-public abstract class AbstractStub {
+public abstract class Stub {
     public <T> T invoke(String methodName, Object... arguments) throws Exception {
         throw new Exception("Not implemented");
     }
