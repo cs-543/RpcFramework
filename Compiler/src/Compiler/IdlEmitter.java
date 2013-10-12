@@ -1,17 +1,17 @@
 package Compiler;
 
-import java.io.PrintStream;
+import java.io.OutputStream;
 
 /**
  * Class capable of printing an interface in IDL.
  */
-public class InterfaceEmitter extends Emitter {
+public class IdlEmitter extends Emitter {
     /**
-     * Initializes a new instance of the InterfaceEmitter class.
+     * Initializes a new instance of the IdlEmitter class.
      *
      * @param output The output stream.
      */
-    public InterfaceEmitter(PrintStream output) {
+    public IdlEmitter(OutputStream output) {
         super(output);
     }
 
@@ -21,7 +21,7 @@ public class InterfaceEmitter extends Emitter {
      * @param interface_ The interface to emit.
      * @return Returns itself for method chaining.
      */
-    public InterfaceEmitter emit(Interface interface_) {
+    public IdlEmitter emit(Interface interface_) {
         // Begin of interface.
         output.append("interface ");
         output.append(interface_.getName());
