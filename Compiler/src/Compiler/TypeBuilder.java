@@ -36,11 +36,11 @@ class TypeBuilder {
         return genericType("InOut", type);
     }
 
-    private static String genericType(String generic, String parameter) {
-        return generic + "<" + wrapperOf(parameter) + ">";
+    public static String genericType(String generic, String parameter) {
+        return generic + "<" + wrapper(parameter) + ">";
     }
 
-    private static String wrapperOf(String type) {
+    public static String wrapper(String type) {
         if (wrappers.containsKey(type)) {
             return wrappers.get(type);
         }

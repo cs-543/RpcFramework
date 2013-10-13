@@ -8,6 +8,8 @@ public class JavaStubEmitter extends Emitter {
     }
 
     public JavaStubEmitter emit(Interface interface_) {
+        output.append("import Rpc.Call;\n\n");
+
         output.append("public class ");
         output.append(interface_.getName());
         output.append("_Stub {\n");
@@ -29,6 +31,11 @@ public class JavaStubEmitter extends Emitter {
     }
 
     private void emit(Operation operation) {
+        // Policy.
+        output.append("@");
+        output.append(operation.getPolicy().toString());
+        output.append("\n");
+
         if (operation.isAsync()) {
             emitAsyncOperation(operation);
         } else {
@@ -69,9 +76,23 @@ public class JavaStubEmitter extends Emitter {
         output.append(") {\n");
         output.indent();
 
-        output.append("invoke(\"");
+        output.append("Call c = new Call(\"");
         output.append(operation.getName());
-        output.append("\");\n");
+        output.append("\"");
+
+        for (Parameter p : operation.getParameters()) {
+            output.append(", ");
+            output.append(p.getName());
+        }
+
+        output.append(");\n");
+
+        if (!operation.getType().equals("void")) {
+            output.append("return ");
+        }
+
+        output.append(TypeBuilder.genericType("invoke", operation.getType()));
+        output.append("(call);\n");
 
         output.unindent();
         output.append("}");
@@ -95,10 +116,17 @@ public class JavaStubEmitter extends Emitter {
         output.indent();
 
         // Body.
-        output.append("invokeAsync(callback, \"");
+        output.append("Call c = new Call(\"");
         output.append(operation.getName());
         output.append("\"");
+
+        for (Parameter p : operation.getParameters()) {
+            output.append(", ");
+            output.append(p.getName());
+        }
+
         output.append(");\n");
+        output.append("invokeAsync(call, callback);\n");
 
         output.unindent();
         output.append("}");
