@@ -22,6 +22,7 @@ public class JavaInterfaceEmitter extends Emitter {
      * @return Returns itself for method chaining.
      */
     public JavaInterfaceEmitter emit(Interface interface_) {
+        output.append("import Rpc.*;\n\n");
         output.append("public interface ");
         output.append(interface_.getName());
         output.append(" {\n");
@@ -33,7 +34,7 @@ public class JavaInterfaceEmitter extends Emitter {
             delimiter = "\n";
 
             emit(operation);
-            output.append(";\n");
+            output.append(" throws Exception;\n");
         }
 
         output.unindent();
