@@ -8,11 +8,11 @@ public class JavaStubEmitter extends Emitter {
     }
 
     public JavaStubEmitter emit(Interface interface_) {
-        output.append("import Rpc.Call;\n\n");
+        output.append("import Rpc.*;\n\n");
 
         output.append("public class ");
         output.append(interface_.getName());
-        output.append("_Stub {\n");
+        output.append("_Stub extends Stub {\n");
         output.indent();
 
         String delimiter = "";
@@ -31,11 +31,6 @@ public class JavaStubEmitter extends Emitter {
     }
 
     private void emit(Operation operation) {
-        // Policy.
-        output.append("@");
-        output.append(operation.getPolicy().toString());
-        output.append("\n");
-
         if (operation.isAsync()) {
             emitAsyncOperation(operation);
         } else {
@@ -73,10 +68,10 @@ public class JavaStubEmitter extends Emitter {
             emit(p);
         }
 
-        output.append(") {\n");
+        output.append(") throws Exception {\n");
         output.indent();
 
-        output.append("Call c = new Call(\"");
+        output.append("Call call = new Call(\"");
         output.append(operation.getName());
         output.append("\"");
 
@@ -91,8 +86,7 @@ public class JavaStubEmitter extends Emitter {
             output.append("return ");
         }
 
-        output.append(TypeBuilder.genericType("invoke", operation.getType()));
-        output.append("(call);\n");
+        output.append("invoke(call);\n");
 
         output.unindent();
         output.append("}");
@@ -112,11 +106,11 @@ public class JavaStubEmitter extends Emitter {
 
         // Append callback parameter.
         output.append(TypeBuilder.genericCallbackType(operation.getType()));
-        output.append(" callback) {\n");
+        output.append(" callback) throws Exception {\n");
         output.indent();
 
         // Body.
-        output.append("Call c = new Call(\"");
+        output.append("Call call = new Call(\"");
         output.append(operation.getName());
         output.append("\"");
 
