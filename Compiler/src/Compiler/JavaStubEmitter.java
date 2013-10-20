@@ -12,7 +12,9 @@ public class JavaStubEmitter extends Emitter {
 
         output.append("public class ");
         output.append(interface_.getName());
-        output.append("_Stub extends Stub {\n");
+        output.append("_Stub extends Stub implements ");
+        output.append(interface_.getName());
+        output.append(" {\n");
         output.indent();
 
         String delimiter = "";
@@ -25,12 +27,15 @@ public class JavaStubEmitter extends Emitter {
         }
 
         output.unindent();
-        output.append("}");
+        output.append("}\n");
 
         return this;
     }
 
     private void emit(Operation operation) {
+        output.append("@Override\n");
+        output.append("public ");
+
         if (operation.isAsync()) {
             emitAsyncOperation(operation);
         } else {

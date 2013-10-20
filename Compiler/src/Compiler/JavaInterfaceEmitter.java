@@ -38,7 +38,7 @@ public class JavaInterfaceEmitter extends Emitter {
         }
 
         output.unindent();
-        output.append("}");
+        output.append("}\n");
 
         return this;
     }
