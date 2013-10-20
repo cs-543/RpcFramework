@@ -155,17 +155,17 @@ class Tokenizer {
      * @throws Exception
      */
     private char nextNonWhitespace() throws Exception {
-        char c = nextChar();
+        char c;
 
-        while (Character.isWhitespace(c)) {
+        do {
+            c = nextChar();
+
             if (c == '\n') {
                 // Increase line count and reset column caret.
                 line++;
                 column = 0;
             }
-
-            c = nextChar();
-        }
+        } while (Character.isWhitespace(c));
 
         return c;
     }
@@ -177,6 +177,7 @@ class Tokenizer {
     private char nextChar() throws Exception {
         if (bufferPosition == inBufferCount) {
             inBufferCount = reader.read(buffer);
+            bufferPosition = 0;
         }
 
         column++;
