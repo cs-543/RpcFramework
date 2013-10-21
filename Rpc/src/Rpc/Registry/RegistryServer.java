@@ -22,7 +22,6 @@ public class RegistryServer implements Runnable {
         }
 
         boolean shouldStop = false;
-
         while (!shouldStop) {
             try {
                 Socket client = serverSocket.accept();

@@ -53,7 +53,7 @@ class ClientHandler implements Runnable {
         }
 
         if (method.equals("unregister")) {
-            processUnregister(argument);
+            return processUnregister(argument);
         }
 
         throw new Exception("Unknown method.");
@@ -65,14 +65,14 @@ class ClientHandler implements Runnable {
     }
 
     private String processRegister(String argument) throws Exception {
-        if (!isValidServiceName(argument)) {
-            throw new Exception("Invalid service name.");
-        }
-
         String[] serviceParams = argument.split(":");
 
         if (serviceParams.length != 2) {
             throw new Exception("Malformed request.");
+        }
+
+        if (!isValidServiceName(serviceParams[0])) {
+            throw new Exception("Invalid service name.");
         }
 
         server.registerService(serviceParams[0], new ServiceInfo(client.getInetAddress(), Integer.parseInt(serviceParams[1])));
