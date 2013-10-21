@@ -45,35 +45,47 @@ class ClientHandler implements Runnable {
 
     private String processRequest(String method, String argument) throws Exception {
         if (method.equals("lookup")) {
-            ServiceInfo serviceInfo = server.getServiceInfoByName(argument);
-            return String.format("%s:%d", serviceInfo.getAddress().getHostAddress(), serviceInfo.getPort());
+            return processLookup(argument);
         }
 
         if (method.equals("register")) {
-            if (!isValidServiceName(argument)) {
-                throw new Exception("Invalid service name.");
-            }
-
-            String[] serviceParams = argument.split(":");
-
-            if (serviceParams.length != 2) {
-                throw new Exception("Malformed request.");
-            }
-
-            server.registerService(serviceParams[0], new ServiceInfo(client.getInetAddress(), Integer.parseInt(serviceParams[1])));
-            return "Service registered.";
+            return processRegister(argument);
         }
 
         if (method.equals("unregister")) {
-            if (!isValidServiceName(argument)) {
-                throw new Exception("Invalid service name.");
-            }
-
-            server.unregisterService(argument);
-            return "Service unregistered.";
+            processUnregister(argument);
         }
 
         throw new Exception("Unknown method.");
+    }
+
+    private String processLookup(String argument) throws Exception {
+        ServiceInfo serviceInfo = server.getServiceInfoByName(argument);
+        return String.format("%s:%d", serviceInfo.getAddress().getHostAddress(), serviceInfo.getPort());
+    }
+
+    private String processRegister(String argument) throws Exception {
+        if (!isValidServiceName(argument)) {
+            throw new Exception("Invalid service name.");
+        }
+
+        String[] serviceParams = argument.split(":");
+
+        if (serviceParams.length != 2) {
+            throw new Exception("Malformed request.");
+        }
+
+        server.registerService(serviceParams[0], new ServiceInfo(client.getInetAddress(), Integer.parseInt(serviceParams[1])));
+        return "Service registered.";
+    }
+
+    private String processUnregister(String argument) throws Exception {
+        if (!isValidServiceName(argument)) {
+            throw new Exception("Invalid service name.");
+        }
+
+        server.unregisterService(argument);
+        return "Service unregistered.";
     }
 
     private boolean isValidServiceName(String name) {
