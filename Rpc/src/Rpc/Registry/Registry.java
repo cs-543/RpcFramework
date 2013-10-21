@@ -1,5 +1,9 @@
 package Rpc.Registry;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,33 +11,66 @@ public class Registry {
     private static final Pattern URI_PATTERN = Pattern.compile("rpc://([_a-zA-Z][_a-zA-Z0-9]+)(:[0-9]+)?/([_a-zA-Z][_a-zA-Z0-9]+)");
     public static final int REGISTRY_PORT = 10000;
 
-    public static <T> T getServiceByURI(String uri) throws Exception {
-        Matcher matcher = URI_PATTERN.matcher(uri);
+    @SuppressWarnings("unchecked")
+    public static <T> T getService(String uri, Class<T> type) throws Exception {
+        String[] hostInfo = request(getSocketFromUri(uri), "lookup " + getServiceFromUri(uri)).split(":");
+        Socket remoteSocket = new Socket(hostInfo[0], Integer.parseInt(hostInfo[1]));
 
-        if (!matcher.matches()) {
-            throw new Exception("Malformed URI.");
-        }
+        return (T) Class.forName(type.getName() + "_Stub").getConstructor(Socket.class).newInstance(remoteSocket);
+    }
+
+    public static <T> void registerService(String uri, T service) throws Exception {
+        // TODO make skeleton, get port
+        int port = -1;
+
+
+        request(getSocketFromUri(uri), "register " + getServiceFromUri(uri) + ":1000");
+    }
+
+    public static void unregisterService(String uri) throws Exception {
+        Socket socket = getSocketFromUri(uri);
+        request(socket, "unregister " + getServiceFromUri(uri));
+    }
+
+    private static Socket getSocketFromUri(String uri) throws Exception {
+        Matcher matcher = matchUri(uri);
 
         String host = matcher.group(1);
         int port = REGISTRY_PORT;
-        String service = matcher.group(3);
 
         if (matcher.group(2) != null) {
             port = Integer.parseInt(matcher.group(1));
         }
 
-        //Socket socket = new Socket(host, port);
-
-        System.out.printf("rpc://%s:%d/%s\n", host, port, service);
-
-        return (T) null;
+        return new Socket(host, port);
     }
 
-    public static <T> void registerService(String name, T service) {
-
+    private static String getServiceFromUri(String uri) throws Exception {
+        return matchUri(uri).group(3);
     }
 
-    public static void unregisterService(String name) {
+    private static String request(Socket socket, String request) throws Exception {
+        PrintStream output = new PrintStream(socket.getOutputStream());
+        output.append(request);
+        output.append("\n");
 
+        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String response = input.readLine();
+
+        if (response.startsWith("!")) {
+            throw new Exception(response.substring(1));
+        }
+
+        return response;
+    }
+
+    private static Matcher matchUri(String uri) throws Exception {
+        Matcher matcher = URI_PATTERN.matcher(uri);
+
+        if (!matcher.matches()) {
+            throw new Exception("Malformed Uri.");
+        }
+
+        return matcher;
     }
 }
