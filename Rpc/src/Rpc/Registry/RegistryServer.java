@@ -39,7 +39,7 @@ public class RegistryServer implements Runnable {
 
         synchronized (services) {
             if (!services.containsKey(name)) {
-                throw new Exception("Lookup failed: no such service.");
+                throw new Exception("No such service.");
             }
 
             address = services.get(name);
@@ -51,7 +51,7 @@ public class RegistryServer implements Runnable {
     public void registerService(String name, InetAddress address) throws Exception {
         synchronized (services) {
             if (services.containsKey(name)) {
-                throw new Exception("Registration failed: duplicate name.");
+                throw new Exception("Duplicate name.");
             }
 
             services.put(name, address);
@@ -61,7 +61,7 @@ public class RegistryServer implements Runnable {
     public void unregisterService(String name) throws Exception {
         synchronized (services) {
             if (!services.containsKey(name)) {
-                throw new Exception("Unregistration failed: no such service.");
+                throw new Exception("No such service.");
             }
 
             services.remove(name);
