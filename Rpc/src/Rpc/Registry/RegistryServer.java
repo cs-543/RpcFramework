@@ -17,20 +17,19 @@ public class RegistryServer implements Runnable {
         ServerSocket serverSocket;
 
         try {
-            serverSocket = new ServerSocket(10000);
+            serverSocket = new ServerSocket(Registry.REGISTRY_PORT);
         } catch (Exception e) {
             return;
         }
-
 
         boolean shouldStop = false;
 
         while (!shouldStop) {
             try {
-            Socket client = serverSocket.accept();
-            executor.execute(new ClientHandler(this, client));
-        } catch (Exception e) {
-            shouldStop = true;
+                Socket client = serverSocket.accept();
+                executor.execute(new ClientHandler(this, client));
+            } catch (Exception e) {
+                shouldStop = true;
             }
         }
     }

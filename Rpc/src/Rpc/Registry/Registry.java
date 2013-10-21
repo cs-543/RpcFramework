@@ -1,13 +1,11 @@
 package Rpc.Registry;
 
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Registry {
     private static final Pattern URI_PATTERN = Pattern.compile("rpc://([_a-zA-Z][_a-zA-Z0-9]+)(:[0-9]+)?/([_a-zA-Z][_a-zA-Z0-9]+)");
-    private static final int REGISTRY_PORT = 10000;
+    public static final int REGISTRY_PORT = 10000;
 
     public static <T> T getServiceByURI(String uri) throws Exception {
         Matcher matcher = URI_PATTERN.matcher(uri);
@@ -28,7 +26,7 @@ public class Registry {
 
         System.out.printf("rpc://%s:%d/%s\n", host, port, service);
 
-        return (T)null;
+        return (T) null;
     }
 
     public static <T> void registerService(String name, T service) {
