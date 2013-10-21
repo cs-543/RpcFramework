@@ -3,7 +3,6 @@ package Rpc.Registry;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.Socket;
 
 class ClientHandler implements Runnable {
@@ -46,8 +45,8 @@ class ClientHandler implements Runnable {
 
     private String processRequest(String method, String argument) throws Exception {
         if (method.equals("lookup")) {
-            InetAddress address = server.getServiceAddressByName(argument);
-            return address.getHostAddress();
+            ServiceInfo serviceInfo = server.getServiceInfoByName(argument);
+            return String.format("%s:%d", serviceInfo.getAddress().getHostAddress(), serviceInfo.getPort());
         }
 
         if (method.equals("register")) {
@@ -55,7 +54,13 @@ class ClientHandler implements Runnable {
                 throw new Exception("Invalid service name.");
             }
 
-            server.registerService(argument, client.getInetAddress());
+            String[] serviceParams = argument.split(":");
+
+            if (serviceParams.length != 2) {
+                throw new Exception("Malformed request.");
+            }
+
+            server.registerService(serviceParams[0], new ServiceInfo(client.getInetAddress(), Integer.parseInt(serviceParams[1])));
             return "Service registered.";
         }
 
