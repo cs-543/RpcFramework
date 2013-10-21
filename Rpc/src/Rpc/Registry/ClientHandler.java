@@ -32,6 +32,7 @@ class ClientHandler implements Runnable {
             output.append(response);
             output.append("\n");
         } catch (Exception e) {
+            output.append("!");
             output.append(e.getMessage());
             output.append("\n");
         } finally {
@@ -46,7 +47,7 @@ class ClientHandler implements Runnable {
     private String processRequest(String method, String argument) throws Exception {
         if (method.equals("lookup")) {
             InetAddress address = server.getServiceAddressByName(argument);
-            return address.toString();
+            return address.getHostAddress();
         }
 
         if (method.equals("register")) {
