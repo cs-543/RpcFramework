@@ -1,4 +1,4 @@
-package Compiler;
+package Rpc.Compiler;
 
 /**
  * Represents a token.

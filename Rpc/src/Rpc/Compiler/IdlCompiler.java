@@ -1,8 +1,8 @@
-package Compiler;
+package Rpc.Compiler;
 
 import java.io.InputStream;
 
-import static Compiler.Token.TokenType.*;
+import static Rpc.Compiler.Token.TokenType.*;
 
 /**
  * Compiles an IDL file
@@ -60,13 +60,13 @@ public class IdlCompiler {
 
         expect(TT_INTERFACE);
 
-        // Interface name.
+        // Read interface name.
         expect(TT_IDENTIFIER);
         interface_.setName(lastIdentifier);
 
         expect(TT_OPENBRACE);
 
-        // Parse all operations.
+        // Read all operations.
         Operation operation;
         while ((operation = nextOperation()) != null) {
             interface_.addOperation(operation);
@@ -86,12 +86,12 @@ public class IdlCompiler {
     private Operation nextOperation() throws Exception {
         Operation operation = new Operation();
 
-        // No more operations.
+        // Close brace reached: no more operations.
         if (currentToken.getType() == TT_CLOSEBRACE) {
             return null;
         }
 
-        // Operation policy attribute.
+        // Read execution policy attribute.
         if (accept(TT_OPENBRACKET)) {
             if (accept(TT_ATMOSTONCE)) {
                 operation.setPolicy(ExecutionPolicy.AtMostOnce);
@@ -118,7 +118,7 @@ public class IdlCompiler {
 
         expect(TT_OPENPARENS);
 
-        // Parse all parameters.
+        // Read all parameters.
         Parameter parameter;
         boolean firstParam = true;
         while ((parameter = nextParameter(!firstParam)) != null) {

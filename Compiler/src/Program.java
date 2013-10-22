@@ -1,4 +1,4 @@
-import Compiler.*;
+import Rpc.Compiler.*;
 
 import java.io.FileInputStream;
 import java.io.*;

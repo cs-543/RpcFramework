@@ -1,4 +1,4 @@
-package Compiler;
+package Rpc.Compiler;
 
 import java.util.ArrayList;
 import java.util.List;

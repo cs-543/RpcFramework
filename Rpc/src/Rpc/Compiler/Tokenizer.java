@@ -1,11 +1,11 @@
-package Compiler;
+package Rpc.Compiler;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Compiler.Token.TokenType.*;
+import static Rpc.Compiler.Token.TokenType.*;
 
 /**
  * Creates Tokens from a stream of characters.

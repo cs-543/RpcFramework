@@ -1,4 +1,4 @@
-package Compiler;
+package Rpc.Compiler;
 
 /**
  * Different execution policies for remote procedures.

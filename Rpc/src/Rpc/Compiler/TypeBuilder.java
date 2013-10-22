@@ -1,4 +1,4 @@
-package Compiler;
+package Rpc.Compiler;
 
 import java.util.HashMap;
 import java.util.Map;
