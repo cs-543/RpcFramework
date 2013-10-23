@@ -1,16 +1,19 @@
 package Rpc;
 
 public class Call {
-    String methodName;
+    String method;
     Object[] arguments;
 
-    public Call(String methodName, Object... arguments) {
-        this.methodName = methodName;
+    public Call() {
+    }
+
+    public Call(String method, Object... arguments) {
+        this.method = method;
         this.arguments = arguments;
     }
 
-    public String getMethodName() {
-        return methodName;
+    public String getMethod() {
+        return method;
     }
 
     public Object[] getArguments() {

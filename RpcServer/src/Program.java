@@ -6,7 +6,7 @@ public class Program {
 
         Registry.registerService("rpc://localhost/TestInterface", testInterface);
 
-        System.out.println("Press any key to terminate...");
+        System.out.println("Service registered, press any key to terminate...");
         System.in.read();
 
         Registry.unregisterService("rpc://localhost/TestInterface");
