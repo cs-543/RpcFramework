@@ -8,13 +8,18 @@ public class JavaStubEmitter extends Emitter {
     }
 
     public JavaStubEmitter emit(Interface interface_) {
-        output.append("import Rpc.*;\n\n");
+        output.append("import Rpc.*;\n");
+        output.append("import java.net.Socket;\n\n");
 
         output.append("public class ");
         output.append(interface_.getName());
         output.append("_Stub extends Stub implements ");
         output.append(interface_.getName());
         output.append(" {\n");
+        output.append("    private Socket remoteSocket;\n\n");
+        output.append("    public " + interface_.getName() + "_Stub(Socket r) {\n");
+        output.append("        remoteSocket = r;\n");
+        output.append("    }\n\n");
         output.indent();
 
         String delimiter = "";
@@ -91,7 +96,7 @@ public class JavaStubEmitter extends Emitter {
             output.append("return ");
         }
 
-        output.append("invoke(call);\n");
+        output.append("invoke(remoteSocket, call);\n");
 
         output.unindent();
         output.append("}");
@@ -125,7 +130,7 @@ public class JavaStubEmitter extends Emitter {
         }
 
         output.append(");\n");
-        output.append("invokeAsync(call, callback);\n");
+        output.append("invokeAsync(remoteSocket, call, callback);\n");
 
         output.unindent();
         output.append("}");
