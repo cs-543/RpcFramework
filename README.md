@@ -35,3 +35,14 @@ The client first connects the name server(2) and asks where is the RMI server
 based on name. The name server responds(3) and then client connects directly to
 the target RMI server(4).
 
+Naming scheme
+-------------
+
+The names are of the form:
+
+    rpc://hostname:port/service_name
+
+'hostname' and 'port' tell which host and port the server is on and
+'service_name' is the name of the service. The client uses 'service_name' to
+refer to a service.
+
