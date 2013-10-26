@@ -1,5 +1,7 @@
 package Rpc.Registry;
 
+import Rpc.Skeleton;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -12,19 +14,22 @@ public class Registry {
     public static final int REGISTRY_PORT = 10000;
 
     @SuppressWarnings("unchecked")
-    public static <T> T getService(String uri, Class<T> type) throws Exception {
+    public static <T> T getServiceByURI(String uri, Class<T> type) throws Exception {
         String[] hostInfo = request(getSocketFromUri(uri), "lookup " + getServiceFromUri(uri)).split(":");
         Socket remoteSocket = new Socket(hostInfo[0], Integer.parseInt(hostInfo[1]));
 
         return (T) Class.forName(type.getName() + "_Stub").getConstructor(Socket.class).newInstance(remoteSocket);
     }
 
-    public static <T> void registerService(String uri, T service) throws Exception {
-        // TODO make skeleton, get port
-        int port = -1;
+    public static <T> Skeleton<T> registerService(String uri, T service) throws Exception {
+        Skeleton<T> skel = new Skeleton(service);
+        int port = skel.getPort();
 
+        request(getSocketFromUri(uri), "register " + getServiceFromUri(uri) +
+                ":" + Integer.toString(port) );
 
-        request(getSocketFromUri(uri), "register " + getServiceFromUri(uri) + ":1000");
+        skel.run();
+        return skel;
     }
 
     public static void unregisterService(String uri) throws Exception {
