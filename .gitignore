@@ -1,3 +1,11 @@
 *.iml
+*.class
 .idea/
 out/
+
+# my (Mikko) shell scripts at the top
+client
+compile
+registry
+server
+
