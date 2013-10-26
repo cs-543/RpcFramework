@@ -21,15 +21,28 @@ public class ObjectStreamReader {
 
     public ObjectStreamReader(InputStream input) {
         this.input = new InputStreamReader(input);
+        
+        try { // Initializing the currentChar
+            advance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public <T> T readObject(Class<T> type) throws Exception {
+        /*
+         * Note that according to
+         * http://craftingjava.blogspot.kr/2012/07/javalanginstantiationexception-revised.html
+         * If the class object represents "the abstract class or primitive types or a class that
+         * has no nullary constructor" then those classes cannot be instantiated with newInstance
+         */
         T result = type.newInstance();
-
-        advance();
+        
         expect('{');
 
         while (currentChar != '}') {
+            if(currentChar == ',')
+                advance();
             // Read field name
             // Figure out type
             String fieldName = readString();
@@ -53,7 +66,7 @@ public class ObjectStreamReader {
                     value = readArray(fieldType.getComponentType());
                     break;
                 case '{':
-                    //readObject();
+                    value = readObject(fieldType);
                     break;
                 default:
                     throw new Exception("Unexpected " + currentChar);
@@ -81,15 +94,15 @@ public class ObjectStreamReader {
 
         String s = builder.toString();
 
-        if (type == Boolean.class) {
+        if (type == boolean.class) {
             return Boolean.parseBoolean(s);
         }
 
-        if (type == Byte.class) {
+        if (type == byte.class) {
             return Byte.parseByte(s);
         }
 
-        if (type == Character.class) {
+        if (type == char.class) {
             if (s.length() != 1) {
                 throw new Exception("Parse error");
             }
@@ -97,19 +110,19 @@ public class ObjectStreamReader {
             return s.charAt(0);
         }
 
-        if (type == Short.class) {
+        if (type == short.class) {
             return Short.parseShort(s);
         }
 
-        if (type == Integer.class) {
+        if (type == int.class) {
             return Integer.parseInt(s);
         }
 
-        if (type == Float.class) {
+        if (type == float.class) {
             return Float.parseFloat(s);
         }
 
-        if (type == Double.class) {
+        if (type == double.class) {
             return Double.parseDouble(s);
         }
 
@@ -121,8 +134,9 @@ public class ObjectStreamReader {
         expect('"');
 
         StringBuilder builder = new StringBuilder();
-        // TODO handle escaped strings
         while (currentChar != '"') {
+            if(currentChar == '\\') // handling escaped characters
+                advance();          // by appending whatever has been escaped
             builder.append(currentChar);
             advance();
         }
