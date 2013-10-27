@@ -1,4 +1,5 @@
 SOURCE := ./Program.java \
+          ./ForwardCallback.java \
           ./TestInterface.java \
 	  ./TestInterface_Stub.java
 

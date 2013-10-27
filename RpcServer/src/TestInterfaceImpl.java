@@ -38,14 +38,15 @@ public class TestInterfaceImpl implements TestInterface {
 
     @Override
     public int __test_forwardArg(int arg) {
-        System.out.println("Call: __test_voidCall");
+        System.out.println("Call: __test_forwardArg");
 
         return arg*3;
     }
 
     @Override
     public void __test_forwardArgAsync(int arg, Callback<Integer> callback) {
-        System.out.println("Call: __test_voidCall");
+        System.out.println("Call: __test_forwardArgAsync");
+        callback.call(arg-10);
     }
 
     @Override

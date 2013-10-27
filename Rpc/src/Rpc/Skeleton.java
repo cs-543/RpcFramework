@@ -56,7 +56,7 @@ public class Skeleton<T> implements Runnable {
                     RunningIndex running_index_ob =
                         (RunningIndex) obr.readObject();
                     int running_index = running_index_ob.runningIndex;
-
+                    boolean has_callback = (boolean) obr.readObject();
                     Call c = (Call) obr.readObject();
 
                     // We could easily start a thread for each call; however, I
@@ -65,8 +65,23 @@ public class Skeleton<T> implements Runnable {
                     boolean found_it = false;
                     for ( Method m : methods ) {
                         if ( m.getName().equals(c.method) ) {
-                            Object ret = m.invoke(implementation, c.arguments);
+                            Object actual_arguments[] = null;
+                            ProxyCallback pc = null;
+                            if ( has_callback ) {
+                                pc = new ProxyCallback();
+                                actual_arguments = new Object[c.arguments.length+1];
+                                for ( int i1 = 0; i1 < c.arguments.length; ++i1) {
+                                    actual_arguments[i1] = c.arguments[i1];
+                                }
+                                actual_arguments[c.arguments.length] = pc;
+                            } else {
+                                actual_arguments = c.arguments;
+                            }
+                            Object ret = m.invoke(implementation, actual_arguments);
                             obw.write(running_index_ob);
+                            if ( has_callback ) {
+                                obw.write(pc.value);
+                            }
 
                             if ( ret != null &&
                                  ret.getClass() != void.class ) {

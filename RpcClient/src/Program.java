@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 
 public class Program {
 
+
     public static void main(String[] args) throws Exception {
         TestInterface remoteInterface = Rpc.Registry.Registry.getServiceByURI("rpc://localhost/TestInterface", TestInterface.class);
 
@@ -29,6 +30,12 @@ public class Program {
         InOut<Integer> iou = new InOut<Integer>(101);
         remoteInterface.__test_inOutArg(iou);
         System.out.println(iou.getValue());
+
+        ForwardCallback fc = new ForwardCallback();
+
+        System.out.println("Calling: __testforwardArgAsync arg=150");
+        remoteInterface.__test_forwardArgAsync(150, fc);
+        System.out.println("Async going...");
     }
 }
 
