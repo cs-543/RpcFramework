@@ -17,9 +17,10 @@ public class JavaStubEmitter extends Emitter {
         output.append("_Stub extends Stub implements ");
         output.append(interface_.getName());
         output.append(" {\n");
-        output.append("    public " + interface_.getName() + "_Stub(Socket s) ");
+        output.append("    public " + interface_.getName() + "_Stub(Socket s, " +
+                      "String uri) ");
         output.append("throws IOException {\n");
-        output.append("        super(s);\n    }\n\n");
+        output.append("        super(s, uri);\n    }\n\n");
         output.indent();
 
         String delimiter = "";
@@ -96,7 +97,11 @@ public class JavaStubEmitter extends Emitter {
             output.append("return ");
         }
 
-        output.append("invoke(call);\n");
+        if ( operation.getPolicy() == ExecutionPolicy.AtMostOnce ) {
+            output.append("invoke(call);\n");
+        } else {
+            output.append("invokeAtLeastOnce(call);\n");
+        }
 
         output.unindent();
         output.append("}");
@@ -130,7 +135,11 @@ public class JavaStubEmitter extends Emitter {
         }
 
         output.append(");\n");
-        output.append("invokeAsync(call, callback);\n");
+        if ( operation.getPolicy() == ExecutionPolicy.AtMostOnce ) {
+            output.append("invokeAsync(call, callback);\n");
+        } else {
+            output.append("invokeAsyncAtLeastOnce(call, callback);\n");
+        }
 
         output.unindent();
         output.append("}");

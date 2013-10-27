@@ -15,10 +15,14 @@ public class Registry {
 
     @SuppressWarnings("unchecked")
     public static <T> T getServiceByURI(String uri, Class<T> type) throws Exception {
-        String[] hostInfo = request(getSocketFromUri(uri), "lookup " + getServiceFromUri(uri)).split(":");
-        Socket remoteSocket = new Socket(hostInfo[0], Integer.parseInt(hostInfo[1]));
+        Socket remoteSocket = getSocketByURI(uri);
 
-        return (T) Class.forName(type.getName() + "_Stub").getConstructor(Socket.class).newInstance(remoteSocket);
+        return (T) Class.forName(type.getName() + "_Stub").getConstructor(Socket.class, String.class).newInstance(remoteSocket, uri);
+    }
+
+    public static Socket getSocketByURI(String uri) throws Exception {
+        String[] hostInfo = request(getSocketFromUri(uri), "lookup " + getServiceFromUri(uri)).split(":");
+        return new Socket(hostInfo[0], Integer.parseInt(hostInfo[1]));
     }
 
     public static <T> Skeleton<T> registerService(String uri, T service) throws Exception {

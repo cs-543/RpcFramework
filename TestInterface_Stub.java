@@ -3,8 +3,8 @@ import java.net.Socket;
 import java.io.IOException;
 
 public class TestInterface_Stub extends Stub implements TestInterface {
-    public TestInterface_Stub(Socket s) throws IOException {
-        super(s);
+    public TestInterface_Stub(Socket s, String uri) throws IOException {
+        super(s, uri);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class TestInterface_Stub extends Stub implements TestInterface {
     @Override
     public void __test_policy_atLeastOnce() throws Exception {
         Call call = new Call("__test_policy_atLeastOnce");
-        invoke(call);
+        invokeAtLeastOnce(call);
     }
 }

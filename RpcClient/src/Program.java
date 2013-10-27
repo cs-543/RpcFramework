@@ -1,5 +1,6 @@
 import Rpc.*;
 
+import java.lang.Thread;
 import java.io.ByteArrayInputStream;
 
 public class Program {
@@ -36,6 +37,13 @@ public class Program {
         System.out.println("Calling: __testforwardArgAsync arg=150");
         remoteInterface.__test_forwardArgAsync(150, fc);
         System.out.println("Async going...");
+
+        System.out.println("Waiting 10 seconds before calling " +
+                           "__test_policy_atLeastOnce()...");
+        Thread.sleep(10000);
+        remoteInterface.__test_policy_atLeastOnce();
+        System.out.println("Okay!");
+        Thread.sleep(500);
     }
 }
 
