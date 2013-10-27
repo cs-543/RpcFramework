@@ -15,37 +15,84 @@ public class ObjectStreamReader {
 
     private int inBufferCount;
 
-    private char currentChar;
-
     private int nestLevel = 0;
+
+    private char cachedChar;
+
+    private boolean needsAdvance = true;
 
     public ObjectStreamReader(InputStream input) {
         this.input = new InputStreamReader(input);
-        
-        try { // Initializing the currentChar
+    }
+
+    private char currentChar() throws Exception {
+        initializeIfNecessary();
+        return cachedChar;
+    }
+
+    private void initializeIfNecessary() throws Exception {
+        if ( needsAdvance ) {
             advance();
-        } catch (Exception e) {
-            e.printStackTrace();
+            needsAdvance = false;
         }
     }
 
-    public <T> T readObject(Class<T> type) throws Exception {
-        /*
-         * Note that according to
-         * http://craftingjava.blogspot.kr/2012/07/javalanginstantiationexception-revised.html
-         * If the class object represents "the abstract class or primitive types or a class that
-         * has no nullary constructor" then those classes cannot be instantiated with newInstance
-         */
-        T result = type.newInstance();
-        
+    public Object readObject() throws Exception {
+        initializeIfNecessary();
+
+        expect('<');
+        StringBuilder typebuilder = new StringBuilder();
+        while ( currentChar() != '>' ) {
+            typebuilder.append(currentChar());
+            needsAdvance = true;
+        }
+        expect('>');
+
+        String expected_type = typebuilder.toString();
+        if ( expected_type.equals("null") ) {
+            return null;
+        }
+
+        if ( currentChar() == '\"' ) {
+            StringBuilder valuebuilder = new StringBuilder();
+            needsAdvance = true;
+            while ( currentChar() != '\"' ) {
+                if ( currentChar() == '\\' ) {
+                    needsAdvance = true;
+                    valuebuilder.append( currentChar() );
+                } else {
+                    valuebuilder.append( currentChar() );
+                }
+                needsAdvance = true;
+            }
+            String value = valuebuilder.toString();
+            needsAdvance = true;
+            return convertValueToResult(expected_type, value);
+        } else if ( currentChar() == '[' ) {
+            needsAdvance = true;
+            List elements = new ArrayList();
+            while ( currentChar() != ']' ) {
+                if ( currentChar() == ',' )
+                    needsAdvance = true;
+                elements.add(readObject());
+            }
+            needsAdvance = true;
+            return elements.toArray();
+        }
+
+        // Okay, it's not a string or a primitive type or an array. It must be
+        // some kind of object then.
+        Class type = Class.forName( expected_type );
+        Object result = type.newInstance();
+
         expect('{');
 
-        while (currentChar != '}') {
-            if(currentChar == ',')
-                advance();
+        while (currentChar() != '}') {
+            if(currentChar() == ',')
+                needsAdvance = true;
             // Read field name
             // Figure out type
-            String fieldName = readString();
+            String fieldName = (String) readObject();
 
             Field field = type.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -53,24 +100,7 @@ public class ObjectStreamReader {
             Object value = null;
 
             expect(':');
-
-            switch (currentChar) {
-                case '"':
-                    if (fieldType == String.class) {
-                        value = readString();
-                    } else {
-                        value = readPrimitive(fieldType);
-                    }
-                    break;
-                case '[':
-                    value = readArray(fieldType.getComponentType());
-                    break;
-                case '{':
-                    value = readObject(fieldType);
-                    break;
-                default:
-                    throw new Exception("Unexpected " + currentChar);
-            }
+            value = readObject();
 
             field.set(result, value);
         }
@@ -80,29 +110,30 @@ public class ObjectStreamReader {
         return result;
     }
 
-    private Object readPrimitive(Class<?> type) throws Exception {
-        expect('"');
+    private void advance() throws Exception {
+        cachedChar = nextChar();
+    }
 
-        StringBuilder builder = new StringBuilder();
-
-        while (currentChar != '"') {
-            builder.append(currentChar);
-            advance();
+    private void expect(char c) throws Exception {
+        if (currentChar() != c) {
+            throw new Exception("Expected " + c);
         }
 
-        expect('"');
+        needsAdvance = true;
+    }
 
-        String s = builder.toString();
-
-        if (type == boolean.class) {
+    private static Object convertValueToResult( String typename, String s )
+                         throws Exception {
+        Class type = Class.forName( typename );
+        if (type == boolean.class || type == Boolean.class) {
             return Boolean.parseBoolean(s);
         }
 
-        if (type == byte.class) {
+        if (type == byte.class || type == Byte.class) {
             return Byte.parseByte(s);
         }
 
-        if (type == char.class) {
+        if (type == char.class || type == Character.class) {
             if (s.length() != 1) {
                 throw new Exception("Parse error");
             }
@@ -110,69 +141,33 @@ public class ObjectStreamReader {
             return s.charAt(0);
         }
 
-        if (type == short.class) {
+        if (type == short.class || type == Short.class) {
             return Short.parseShort(s);
         }
 
-        if (type == int.class) {
+        if (type == int.class || type == Integer.class) {
             return Integer.parseInt(s);
         }
 
-        if (type == float.class) {
+        if (type == long.class || type == Long.class) {
+            return Long.parseLong(s);
+        }
+
+        if (type == float.class || type == Float.class) {
             return Float.parseFloat(s);
         }
 
-        if (type == double.class) {
+        if (type == double.class || type == Double.class) {
             return Double.parseDouble(s);
+        }
+
+        // okay, it's not a primitive. Maybe it's a string?
+        if (type == String.class) {
+            return s;
         }
 
         // Should never reach this.
         throw new Exception("Unknown primitive type");
-    }
-
-    private String readString() throws Exception {
-        expect('"');
-
-        StringBuilder builder = new StringBuilder();
-        while (currentChar != '"') {
-            if(currentChar == '\\') // handling escaped characters
-                advance();          // by appending whatever has been escaped
-            builder.append(currentChar);
-            advance();
-        }
-
-        expect('"');
-
-        return builder.toString();
-    }
-
-    private Object readArray(Class<?> type) throws Exception {
-        expect('[');
-
-        List elements = new ArrayList();
-
-        while (currentChar != ']') {
-            if (type.isPrimitive()) {
-                elements.add(readPrimitive(type));
-            }
-        }
-
-        expect(']');
-
-        return elements.toArray();
-    }
-
-    private char advance() throws Exception {
-        currentChar = nextChar();
-        return currentChar;
-    }
-
-    private void expect(char c) throws Exception {
-        if (currentChar != c) {
-            throw new Exception("Expected " + c);
-        }
-
-        advance();
     }
 
     private char nextChar() throws Exception {

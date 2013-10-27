@@ -23,10 +23,20 @@ public abstract class Stub {
     }
 
     public <T> T invoke(Call call) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectStreamWriter obw2 = new ObjectStreamWriter( baos );
+
         ObjectStreamWriter obw = new ObjectStreamWriter( remoteSocket.getOutputStream() );
 
-        obw.write(runningIndex);
+        RunningIndex ri = new RunningIndex();
+        ri.runningIndex = runningIndex;
+
+        obw.write(ri);
         obw.write(call);
+        obw2.write(ri);
+        obw2.write(call);
+        // uncomment if you want to see what actually is getting sent
+        //System.out.println(baos.toString());
         remoteSocket.getOutputStream().flush();
 
         runningIndex++; // wraps around after 2^31-1

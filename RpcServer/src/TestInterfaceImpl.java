@@ -33,6 +33,7 @@ public class TestInterfaceImpl implements TestInterface {
     @Override
     public void __test_allPrimitiveArgs(byte b, char c, short s, int i, long l, float f, double d, String str) {
         System.out.println("Call: __test_allPrimitiveArgs");
+        System.out.println(b + ", " + c + ", " + i + ", " + l + ", " + f + ", " + d + ", " + str);
     }
 
     @Override

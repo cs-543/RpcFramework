@@ -28,7 +28,8 @@ public class Registry {
         request(getSocketFromUri(uri), "register " + getServiceFromUri(uri) +
                 ":" + Integer.toString(port) );
 
-        skel.run();
+        Thread t = new Thread(skel);
+        t.start();
         return skel;
     }
 

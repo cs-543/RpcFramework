@@ -18,9 +18,11 @@ public class ObjectStreamWriter {
     public void write(Object object) throws Exception {
         // Null reference.
         if (object == null) {
-            output.append("null");
+            output.append("<null>");
             return;
         }
+
+        output.append("<" + object.getClass().getName() + ">");
 
         // Primitive types.
         if (isPrimitive(object.getClass())) {
@@ -85,10 +87,8 @@ public class ObjectStreamWriter {
 
             output.append(delimiter);
             delimiter = ",";
-
-            output.append("\"");
-            output.append(f.getName());
-            output.append("\":");
+            write(f.getName());
+            output.append(":");
 
             write(f.get(object));
         }

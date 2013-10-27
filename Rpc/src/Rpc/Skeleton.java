@@ -3,6 +3,8 @@ package Rpc;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.lang.Class;
+import java.lang.reflect.Method;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -35,23 +37,48 @@ public class Skeleton<T> implements Runnable {
     {
         private ObjectStreamReader obr;
         private Socket s;
+        private Method[] methods;
 
-        public ClientHandler(Socket s)
+        public ClientHandler(Socket s) throws Exception
         {
+            obr = new ObjectStreamReader(s.getInputStream());
             this.s = s;
+
+            methods = implementation.getClass().getMethods();
         }
 
         @Override
         public void run() {
-            try {
-                // OutputStreamReader is incomplete which makes it difficult to
-                // continue from here.  -- Mikko
-                obr = new ObjectStreamReader(s.getInputStream());
-                Integer running_index = (Integer) obr.readPrimitive(Integer.class);
-                System.out.println(running_index);
-            } catch (Exception ie) {
+            while(true) {
+                try {
+                    RunningIndex running_index_ob =
+                        (RunningIndex) obr.readObject();
+                    int running_index = running_index_ob.runningIndex;
+
+                    Call c = (Call) obr.readObject();
+
+                    // We could easily start a thread for each call; however, I
+                    // think it's easier to write the server if they can assume no
+                    // two calls are happening simultaneously.
+                    boolean found_it = false;
+                    for ( Method m : methods ) {
+                        if ( m.getName().equals(c.method) ) {
+                            m.invoke(implementation, c.arguments);
+                            found_it = true;
+                            break;
+                        }
+                    }
+                    if ( !found_it ) {
+                        throw new Exception("No such method: '" + c.method + "'");
+                    }
+                } catch (SocketException se) {
+                    return;
+                } catch (Exception ie) {
+                    ie.printStackTrace();
+                    return;
+                }
+                try { s.close(); } catch (Exception e) { };
             }
-            try { s.close(); } catch (Exception e) { };
         }
     }
 
@@ -61,8 +88,10 @@ public class Skeleton<T> implements Runnable {
             try {
                 Socket s = serverSocket.accept();
                 ClientHandler ch = new ClientHandler(s);
-                ch.run();
-            } catch (IOException ie) {
+                Thread t = new Thread(ch);
+                t.start();
+            } catch (Exception ie) {
+                ie.printStackTrace();
             }
         }
     }

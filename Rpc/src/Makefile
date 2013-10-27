@@ -5,6 +5,7 @@ SOURCE := ./Rpc/Skeleton.java \
 	  ./Rpc/Callback.java \
 	  ./Rpc/ObjectStreamReader.java \
 	  ./Rpc/Out.java \
+	  ./Rpc/RunningIndex.java \
 	  ./Rpc/Compiler/Operation.java \
 	  ./Rpc/Compiler/Interface.java \
 	  ./Rpc/Compiler/IdlCompiler.java \
