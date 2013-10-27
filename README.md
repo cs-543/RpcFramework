@@ -1,14 +1,10 @@
-File hierarchy
---------------
+This is an RMI implementation in Java.
 
-    Rpc          The RPC library that implements all the interesting features.
-    Compiler     main() for the compiler.
-    RpcRegistry  main() for the registry server (naming service I think?)
-    RpcClient    main() for the client.
-    RpcServer    main() for the server.
+Our testing system is composed of four parts:
 
-Operation flow
---------------
+   * An interface compiler (Compiler/src/\*)
+   * A registry server
+   * A server
 
 Compiler compiles the 'interface.idl' and outputs 'TestInterface.java' and
 'TestInterface\_Stub.java'. The user code, that wants to use our wonderful RMI
