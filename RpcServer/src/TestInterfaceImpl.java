@@ -22,12 +22,12 @@ public class TestInterfaceImpl implements TestInterface {
 
     @Override
     public void __test_outArg(Out<Integer> arg) throws Exception {
-        throw new Exception("Not implemented");
+        arg.setValue(123);
     }
 
     @Override
     public void __test_inOutArg(InOut<Integer> arg) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        arg.setValue(arg.getValue()*2);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TestInterfaceImpl implements TestInterface {
     public int __test_forwardArg(int arg) {
         System.out.println("Call: __test_voidCall");
 
-        return arg;
+        return arg*3;
     }
 
     @Override

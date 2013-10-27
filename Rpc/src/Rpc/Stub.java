@@ -36,13 +36,33 @@ public abstract class Stub {
         obw2.write(ri);
         obw2.write(call);
         // uncomment if you want to see what actually is getting sent
-        //System.out.println(baos.toString());
+        // System.out.println(baos.toString());
         remoteSocket.getOutputStream().flush();
+
+        RunningIndex returned_ri = (RunningIndex) obr.readObject();
+
+        String got_return = (String) obr.readObject();
+        Object return_value;
+        if ( got_return.equals("return") ) {
+            return_value = obr.readObject();
+        } else {
+            return_value = new Object();
+        }
+
+        for ( Object arg : call.arguments ) {
+            if ( arg.getClass() == Out.class ) {
+                Out new_out = (Out) obr.readObject();
+                ((Out) arg).setValue(new_out.getValue());
+            } else if ( arg.getClass() == InOut.class ) {
+                InOut new_out = (InOut) obr.readObject();
+                ((InOut) arg).setValue(new_out.getValue());
+            }
+        }
 
         runningIndex++; // wraps around after 2^31-1
                         // let's pretend as if nothing bad happens then
 
-        throw new Exception("Not implemented");
+        return (T) return_value;
     }
 
     public <T> void invokeAsync(Call call, Callback<T> callback) throws Exception {

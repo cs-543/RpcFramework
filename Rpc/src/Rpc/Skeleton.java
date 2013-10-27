@@ -36,12 +36,14 @@ public class Skeleton<T> implements Runnable {
     private class ClientHandler implements Runnable
     {
         private ObjectStreamReader obr;
+        private ObjectStreamWriter obw;
         private Socket s;
         private Method[] methods;
 
         public ClientHandler(Socket s) throws Exception
         {
             obr = new ObjectStreamReader(s.getInputStream());
+            obw = new ObjectStreamWriter(s.getOutputStream());
             this.s = s;
 
             methods = implementation.getClass().getMethods();
@@ -63,7 +65,24 @@ public class Skeleton<T> implements Runnable {
                     boolean found_it = false;
                     for ( Method m : methods ) {
                         if ( m.getName().equals(c.method) ) {
-                            m.invoke(implementation, c.arguments);
+                            Object ret = m.invoke(implementation, c.arguments);
+                            obw.write(running_index_ob);
+
+                            if ( ret != null &&
+                                 ret.getClass() != void.class ) {
+                                obw.write("return");
+                                obw.write(ret);
+                            } else {
+                                obw.write("noreturn");
+                            }
+
+                            // Send back out variables
+                            for ( Object a : c.arguments ) {
+                                if ( a.getClass() == Out.class ||
+                                     a.getClass() == InOut.class ) {
+                                    obw.write(a);
+                                }
+                            }
                             found_it = true;
                             break;
                         }
@@ -77,7 +96,6 @@ public class Skeleton<T> implements Runnable {
                     ie.printStackTrace();
                     return;
                 }
-                try { s.close(); } catch (Exception e) { };
             }
         }
     }

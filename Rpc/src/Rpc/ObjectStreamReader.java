@@ -2,6 +2,7 @@ package Rpc;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,9 @@ public class ObjectStreamReader {
 
     private void expect(char c) throws Exception {
         if (currentChar() != c) {
-            throw new Exception("Expected " + c);
+            throw new Exception("Expected " + c + ", got " + currentChar() +
+                                " rest: " +
+                                new String( buffer, 0, inBufferCount-1 ));
         }
 
         needsAdvance = true;
@@ -173,6 +176,9 @@ public class ObjectStreamReader {
     private char nextChar() throws Exception {
         if (bufferPosition == inBufferCount) {
             inBufferCount = input.read(buffer);
+            if ( inBufferCount == -1 ) {
+                throw new SocketException("Stream closed.");
+            }
             bufferPosition = 0;
         }
 
